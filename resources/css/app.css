@@ -1,0 +1,637 @@
+@import "tailwindcss";
+@import "../../vendor/livewire/flux/dist/flux.css";
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+|--------------------------------------------------------------------------
+| 1. Design System & Theme
+|--------------------------------------------------------------------------
+*/
+
+@theme {
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+
+    /* Brand */
+    --color-brand-navy: #151b2d;
+    --color-brand-navy-light: #1f263b;
+    --color-brand-gold: #c9a646;
+    --color-brand-gold-light: #dfc66f;
+
+    /* Background */
+    --color-app-bg: #f5f7fa;
+
+    /* Text */
+    --color-app-text: #1e293b;
+    --color-app-muted: #64748b;
+
+    /* Border */
+    --color-app-border: #e2e8f0;
+
+    /* Zinc palette */
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    /* Flux accent */
+    --color-accent: var(--color-brand-gold);
+    --color-accent-content: var(--color-brand-gold);
+    --color-accent-foreground: #ffffff;
+}
+
+/*
+|--------------------------------------------------------------------------
+| 2. Dark Theme
+|--------------------------------------------------------------------------
+*/
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-brand-gold-light);
+        --color-accent-content: var(--color-brand-gold-light);
+        --color-accent-foreground: var(--color-brand-navy);
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 3. Base Styles
+|--------------------------------------------------------------------------
+*/
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-app-border);
+    }
+
+    html {
+        background: var(--color-app-bg);
+    }
+
+    body {
+        min-height: 100vh;
+        background: var(--color-app-bg);
+        color: var(--color-app-text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Alpine.js: Prevent elements from flashing before initialization */
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 4. Flux UI Integration
+|--------------------------------------------------------------------------
+*/
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2;
+}
+
+/*
+|--------------------------------------------------------------------------
+| 5. Application Components
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    /* Main content */
+
+    .app-content {
+        min-height: 0;
+        width: 100%;
+        background: var(--color-app-bg);
+        padding: 0 !important;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Cards */
+
+    .app-card {
+        background: #ffffff;
+        border: 1px solid var(--color-app-border);
+        border-radius: 1rem;
+        box-shadow:
+            0 1px 2px rgba(15, 23, 42, 0.03),
+            0 4px 12px rgba(15, 23, 42, 0.02);
+    }
+
+    /* Page header */
+
+    .page-title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--color-app-text);
+    }
+
+    .page-description {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--color-app-muted);
+    }
+
+    /* Primary button */
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border-radius: 0.625rem;
+        padding: 0.625rem 1rem;
+        background: var(--color-brand-gold);
+        color: #ffffff;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition:
+            background 150ms ease,
+            transform 150ms ease,
+            box-shadow 150ms ease;
+    }
+
+    .btn-primary:hover {
+        background: #b89435;
+        box-shadow: 0 4px 12px rgba(201, 166, 70, 0.25);
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Photo Crop Modal
+    |--------------------------------------------------------------------------
+    */
+
+    .btn-crop-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.625rem 1rem;
+
+        border: 1px solid #f3d88a;
+        border-radius: 0.625rem;
+
+        background-color: #fef3c7;
+        color: #92400e;
+
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.25rem;
+
+        transition:
+            background-color 150ms ease,
+            border-color 150ms ease,
+            box-shadow 150ms ease;
+    }
+
+    .btn-crop-primary:hover:not(:disabled) {
+        background-color: #fde68a;
+        border-color: #f3d078;
+    }
+
+    .btn-crop-primary:focus-visible {
+        outline: 2px solid var(--color-brand-gold);
+        outline-offset: 2px;
+    }
+
+    .btn-crop-primary:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 6. Sidebar - Base & Layout
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    .app-sidebar {
+        box-sizing: border-box;
+        width: 240px !important;
+        min-width: 240px !important;
+        max-width: 240px !important;
+        color: #cbd5e1;
+    }
+
+    .app-sidebar > *,
+    .app-sidebar .app-sidebar-nav,
+    .app-sidebar [data-flux-sidebar-nav] {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Sidebar header and logo */
+
+    .app-sidebar > [data-flux-sidebar-header] {
+        min-width: 0;
+    }
+
+    /* Navigation container */
+
+    .app-sidebar [data-flux-sidebar-nav] {
+        box-sizing: border-box;
+        padding-inline: 0.5rem !important;
+    }
+
+    /* Section headings */
+
+    .app-sidebar [data-flux-sidebar-nav] > div:not([data-flux-sidebar-group]) {
+        padding-inline: 0.625rem !important;
+        text-align: left;
+    }
+
+    .app-sidebar [data-flux-sidebar-group-heading] {
+        color: #94a3b8;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-align: left;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 7. Sidebar - Navigation Items
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    .app-sidebar .app-sidebar-item,
+    .app-sidebar .app-sidebar-item:focus,
+    .app-sidebar .app-sidebar-item:active {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        color: #cbd5e1 !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: 0.75rem;
+
+        outline: none !important;
+        box-shadow: none;
+        text-align: left;
+
+        transition:
+            background-color 180ms ease,
+            color 180ms ease,
+            border-color 180ms ease,
+            box-shadow 180ms ease;
+    }
+
+    .app-sidebar .app-sidebar-item:hover {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.07) !important;
+        border-color: transparent !important;
+    }
+
+    .app-sidebar .app-sidebar-item:hover svg {
+        color: var(--color-brand-gold-light) !important;
+    }
+
+    /* Navigation icons */
+
+    .app-sidebar .app-sidebar-item > svg,
+    .app-sidebar .app-sidebar-item [data-flux-icon] {
+        flex-shrink: 0;
+    }
+
+    /* Navigation labels */
+
+    .app-sidebar .app-sidebar-item > span,
+    .app-sidebar .app-sidebar-item [data-flux-sidebar-item-label] {
+        min-width: 0;
+        text-align: left;
+    }
+
+    /* Active navigation item */
+
+    .app-sidebar .app-sidebar-item[data-current],
+    .app-sidebar .app-sidebar-item[data-current="true"],
+    .app-sidebar .app-sidebar-item[aria-current="page"],
+    .app-sidebar .app-sidebar-item[data-current]:hover,
+    .app-sidebar .app-sidebar-item[aria-current="page"]:hover,
+    .app-sidebar .app-sidebar-item[data-current]:focus,
+    .app-sidebar .app-sidebar-item[aria-current="page"]:focus,
+    .app-sidebar .app-sidebar-item[data-current]:active,
+    .app-sidebar .app-sidebar-item[aria-current="page"]:active {
+        color: var(--color-brand-gold-light) !important;
+        background-color: rgba(201, 166, 70, 0.14) !important;
+        border-color: rgba(201, 166, 70, 0.24) !important;
+        outline: none !important;
+        box-shadow: inset 3px 0 0 var(--color-brand-gold) !important;
+    }
+
+    .app-sidebar .app-sidebar-item[data-current] svg,
+    .app-sidebar .app-sidebar-item[aria-current="page"] svg {
+        color: var(--color-brand-gold-light) !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 8. Sidebar - User Profile Section
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    /* Bottom user section */
+
+    .app-sidebar > div:last-child {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        border-color: rgba(255, 255, 255, 0.10) !important;
+    }
+
+    /* Dropdown sizing */
+
+    .app-sidebar [data-flux-dropdown],
+    .app-sidebar [data-flux-dropdown] > button,
+    .app-sidebar [data-flux-dropdown-trigger],
+    .app-sidebar [data-flux-sidebar-profile] {
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* User profile trigger */
+
+    .app-sidebar [data-flux-sidebar-profile],
+    .app-sidebar [data-flux-profile],
+    .app-sidebar > div:last-child [data-flux-dropdown] > button,
+    .app-sidebar > div:last-child [data-flux-dropdown-trigger] {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+
+        color: #cbd5e1 !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: 0.75rem;
+        text-align: left;
+
+        transition:
+            background-color 180ms ease,
+            color 180ms ease,
+            border-color 180ms ease;
+    }
+
+    .app-sidebar [data-flux-sidebar-profile]:hover,
+    .app-sidebar [data-flux-sidebar-profile][aria-expanded="true"],
+    .app-sidebar [data-flux-profile]:hover,
+    .app-sidebar [data-flux-profile][aria-expanded="true"],
+    .app-sidebar > div:last-child [data-flux-dropdown] > button:hover,
+    .app-sidebar > div:last-child [data-flux-dropdown-trigger]:hover {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.07) !important;
+        border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    /* User profile icons */
+
+    .app-sidebar [data-flux-sidebar-profile] svg,
+    .app-sidebar [data-flux-profile] svg,
+    .app-sidebar > div:last-child button svg {
+        flex-shrink: 0;
+        color: #94a3b8;
+        transition: color 180ms ease;
+    }
+
+    .app-sidebar [data-flux-sidebar-profile]:hover svg,
+    .app-sidebar [data-flux-profile]:hover svg,
+    .app-sidebar > div:last-child button:hover svg {
+        color: var(--color-brand-gold-light);
+    }
+
+    /* User profile text */
+
+    .app-sidebar [data-flux-sidebar-profile] > div,
+    .app-sidebar [data-flux-profile] > div {
+        min-width: 0;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .app-sidebar [data-flux-sidebar-profile] p,
+    .app-sidebar [data-flux-sidebar-profile] span,
+    .app-sidebar [data-flux-profile] p,
+    .app-sidebar [data-flux-profile] span {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: inherit;
+        text-align: left;
+    }
+
+    /* Custom desktop user menu */
+
+    .app-sidebar .app-sidebar-user-menu,
+    .app-sidebar .sidebar-user-menu {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .app-sidebar .app-sidebar-user-menu > [data-flux-dropdown],
+    .app-sidebar .sidebar-user-menu > [data-flux-dropdown] {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .app-sidebar .app-sidebar-user-menu [data-flux-dropdown-trigger],
+    .app-sidebar .app-sidebar-user-menu > [data-flux-dropdown] > button,
+    .app-sidebar .app-sidebar-user-menu button[data-flux-sidebar-profile],
+    .app-sidebar .sidebar-user-menu [data-flux-dropdown-trigger],
+    .app-sidebar .sidebar-user-menu > [data-flux-dropdown] > button {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .app-sidebar .app-sidebar-user-name {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 9. Sidebar - Desktop Collapse
+|--------------------------------------------------------------------------
+*/
+
+@media (min-width: 1024px) {
+    body:has([data-flux-sidebar-collapsed-desktop]) .app-sidebar {
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        border-width: 0 !important;
+        overflow: hidden !important;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    body:has([data-flux-sidebar-collapsed-desktop]) .app-content {
+        margin-inline-start: 0 !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 10. Sidebar - User Dropdown Menu
+|--------------------------------------------------------------------------
+*/
+
+@layer components {
+    .app-sidebar .sidebar-user-menu [data-flux-menu] {
+        background-color: #ffffff !important;
+        border: 1px solid #d8dee9 !important;
+        border-radius: 0.875rem !important;
+        box-shadow:
+            0 12px 28px rgba(15, 23, 42, 0.14),
+            0 4px 10px rgba(15, 23, 42, 0.07),
+            0 0 0 1px rgba(21, 27, 45, 0.025) !important;
+        overflow: hidden;
+    }
+
+    .app-sidebar .sidebar-user-menu [data-flux-menu] hr,
+    .app-sidebar .sidebar-user-menu [data-flux-menu-separator] {
+        border-color: #e5e9f0 !important;
+    }
+
+    .app-sidebar .sidebar-user-menu [data-flux-menu-item]:hover {
+        background-color: #f1f4f9 !important;
+        border-radius: 0.5rem;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| 11. Search Inputs
+|--------------------------------------------------------------------------
+| Hide native browser clear buttons.
+|--------------------------------------------------------------------------
+*/
+
+#clinic-search::-webkit-search-cancel-button,
+#clinic-search::-webkit-search-decoration,
+#clinic-search::-webkit-search-results-button,
+#clinic-search::-webkit-search-results-decoration,
+
+#document-search::-webkit-search-cancel-button,
+#document-search::-webkit-search-decoration,
+#document-search::-webkit-search-results-button,
+#document-search::-webkit-search-results-decoration,
+
+#user-search::-webkit-search-cancel-button,
+#user-search::-webkit-search-decoration,
+#user-search::-webkit-search-results-button,
+#user-search::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| 12. Pagination
+|--------------------------------------------------------------------------
+| Hide the results summary.
+|--------------------------------------------------------------------------
+*/
+
+nav[role="navigation"] p {
+    display: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| 13. Scrollbar
+|--------------------------------------------------------------------------
+*/
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
