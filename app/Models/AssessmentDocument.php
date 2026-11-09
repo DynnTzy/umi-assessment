@@ -14,8 +14,6 @@ class AssessmentDocument extends Model
 
     protected $fillable = [
         'assessment_item_id',
-        'document_group_id',
-        'version_number',
         'upload_action',
         'upload_note',
         'uploaded_by',
@@ -26,21 +24,9 @@ class AssessmentDocument extends Model
         'instrument_type',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'version_number' => 'integer',
-        ];
-    }
-
     public function assessmentItem(): BelongsTo
     {
         return $this->belongsTo(AssessmentItem::class);
-    }
-
-    public function documentGroup(): BelongsTo
-    {
-        return $this->belongsTo(AssessmentDocumentGroup::class);
     }
 
     public function uploader(): BelongsTo
